@@ -14,6 +14,27 @@ app.get('/api/budget/year', (req, res) => {
   });
 });
 
-// month request as well get request isoloate by req.query(month param)
+app.get('/api/budget/month', (req, res) => {
+  let month = req.query.month;
+  db.getMonthData(month, (results) => {
+    res.status(200);
+    res.send(results);
+  });
+});
+
+app.post('/api/budget', (req, res) => {
+  db.insertTransaction(
+    req.body.date,
+    req.body.description,
+    req.body.amount,
+    req.body.transactionType,
+    req.body.category,
+    req.body.accountName,
+    () => {
+      res.status(201);
+      res.send();
+    }
+  );
+});
 
 app.listen(port, () => console.log(`Budget app listening on port ${port}!`));

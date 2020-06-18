@@ -18,4 +18,35 @@ let getAllData = (cb) => {
   });
 };
 
+let getMonthData = (month, cb) => {
+  let otherMonth = month[1] + '/';
+  connection.query(
+    `SELECT * FROM budget WHERE LOCATE('${month}', date) = 1 UNION SELECT * FROM budget WHERE LOCATE('${otherMonth}', date) = 1`,
+    (err, results, fields) => {
+      if (err) throw err;
+      cb(results);
+    }
+  );
+};
+
+let insertTransaction = (
+  date,
+  description,
+  amount,
+  transactionType,
+  category,
+  accountName,
+  cb
+) => {
+  connection.query(
+    `insert into budget (date, description, amount, transactionType, category, accountName) values ('${date}', '${description}', '${amount}', '${transactionType}', '${category}', '${accountName}')`,
+    (err, results, fields) => {
+      if (err) throw err;
+      cb();
+    }
+  );
+};
+
 module.exports.getAllData = getAllData;
+module.exports.getMonthData = getMonthData;
+module.exports.insertTransaction = insertTransaction;
