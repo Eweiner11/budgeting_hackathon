@@ -8,12 +8,15 @@
   "license": "ISC",
   "scripts": {
     "clean": "rm dist/bundle.js",
-    "build-dev": "webpack -d --mode development ",
+    "build-dev": "webpack -d --mode development",
     "build-prod": "webpack -p --mode production",
-    "start": "webpack-dev-server --hot --mode development"
+    "start": "nodemon ./server/index.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "chart.js": "^2.9.3",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
