@@ -37,4 +37,26 @@ app.post('/api/budget', (req, res) => {
   );
 });
 
+app.get('/api/budget/add', (req, res) => {
+  let month = req.query.month;
+  db.getTrackerData(month, (results) => {
+    res.status(200);
+    res.send(results);
+  });
+});
+
+app.post('/api/budget/add', (req, res) => {
+  db.insertBudget(req.body.date, req.body.amount, () => {
+    res.status(201);
+    res.send();
+  });
+});
+
+app.put('/api/budget/add', (req, res) => {
+  db.updateBudget(req.body.date, req.body.amount, () => {
+    res.status(201);
+    res.send();
+  });
+});
+
 app.listen(port, () => console.log(`Budget app listening on port ${port}!`));

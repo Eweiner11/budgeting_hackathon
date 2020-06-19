@@ -11,6 +11,11 @@ connection.query(createBudgetTable, (err, results, fields) => {
   if (err) throw err;
 });
 
+let createTracker = `create table if not exists tracker(id int primary key auto_increment,Date varchar(255) not null, Amount int not null);`;
+connection.query(createTracker, (err, results, fields) => {
+  if (err) throw err;
+});
+
 let getAllData = (cb) => {
   connection.query(`SELECT * FROM budget`, (err, results, fields) => {
     if (err) throw err;
@@ -34,6 +39,26 @@ let getMonthData = (month, cb) => {
   });
 };
 
+let getTrackerData = (month, cb) => {
+  connection.query(
+    `SELECT * FROM tracker WHERE Date = '${month}'`,
+    (err, results, fields) => {
+      if (err) throw err;
+      cb(results);
+    }
+  );
+};
+
+let updateBudget = (month, value, cb) => {
+  connection.query(
+    `UPDATE tracker SET Amount = ${value} WHERE Date='${month}';`,
+    (err, results, fields) => {
+      if (err) throw err;
+      cb(results);
+    }
+  );
+};
+
 let insertTransaction = (
   date,
   description,
@@ -52,6 +77,19 @@ let insertTransaction = (
   );
 };
 
+let insertBudget = (date, amount, cb) => {
+  connection.query(
+    `insert into tracker (Date, Amount) values ('${date}', '${amount}')`,
+    (err, results, fields) => {
+      if (err) throw err;
+      cb(results);
+    }
+  );
+};
+
 module.exports.getAllData = getAllData;
 module.exports.getMonthData = getMonthData;
 module.exports.insertTransaction = insertTransaction;
+module.exports.getTrackerData = getTrackerData;
+module.exports.insertBudget = insertBudget;
+module.exports.updateBudget = updateBudget;
