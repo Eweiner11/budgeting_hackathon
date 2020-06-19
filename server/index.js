@@ -41,7 +41,7 @@ app.get('/api/budget/add', (req, res) => {
   let month = req.query.month;
   db.getTrackerData(month, (results) => {
     res.status(200);
-    res.send(results);
+    res.send(JSON.stringify(results[0].Amount));
   });
 });
 
