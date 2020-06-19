@@ -19,14 +19,19 @@ let getAllData = (cb) => {
 };
 
 let getMonthData = (month, cb) => {
+  let query;
   let otherMonth = month[1] + '/';
-  connection.query(
-    `SELECT * FROM budget WHERE LOCATE('${month}', date) = 1 UNION SELECT * FROM budget WHERE LOCATE('${otherMonth}', date) = 1`,
-    (err, results, fields) => {
-      if (err) throw err;
-      cb(results);
-    }
-  );
+  if (month === '11') {
+    query = `SELECT * FROM budget WHERE LOCATE('11', date) = 1`;
+  } else if (month === '12') {
+    query = `SELECT * FROM budget WHERE LOCATE('12', date) = 1`;
+  } else {
+    query = `SELECT * FROM budget WHERE LOCATE('${month}', date) = 1 UNION SELECT * FROM budget WHERE LOCATE('${otherMonth}', date) = 1`;
+  }
+  connection.query(query, (err, results, fields) => {
+    if (err) throw err;
+    cb(results);
+  });
 };
 
 let insertTransaction = (
